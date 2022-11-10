@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/QimatLuo/rxjs/issues"
   },
-  "homepage": "https://github.com/QimatLuo/rxjs#readme"
+  "homepage": "https://github.com/QimatLuo/rxjs#readme",
+  "devDependencies": {
+    "@types/jest": "^29.2.2",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.8.4"
+  }
 }
