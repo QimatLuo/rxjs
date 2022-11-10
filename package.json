@@ -4,6 +4,7 @@
   "description": "My RxJS utilities",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write .",
     "test": "jest --watch"
   },
   "repository": {
