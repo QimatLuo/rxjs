@@ -1,5 +1,5 @@
 {
-  "name": "rxjs-qimat",
+  "name": "@QimatLuo/rxjs",
   "version": "1.0.0",
   "description": "My RxJS utilities",
   "main": "index.js",
