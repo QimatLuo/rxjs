@@ -1,0 +1,9 @@
+on: [pull_request]
+jobs:
+  Unit-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          npm ci
+          npx jest --coverage
