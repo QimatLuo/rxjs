@@ -1,20 +1,26 @@
 import { TestScheduler } from "rxjs/testing";
-import { throttleTime } from "rxjs";
+import { fromNullable } from "../src/fromNullable";
 
 const testScheduler = new TestScheduler((actual, expected) => {
   expect(actual).toEqual(expected);
 });
 
-// This test runs synchronously.
-it("generates the stream correctly", () => {
-  testScheduler.run((helpers) => {
-    const { cold, time, expectObservable, expectSubscriptions } = helpers;
-    const e1 = cold(" -a--b--c---|");
-    const e1subs = "  ^----------!";
-    const t = time("   ---|       "); // t = 3
-    const expected = "-a-----c---|";
+describe("fromNullable", () => {
+  it.each([null, undefined])("throwError if %s", (a) => {
+    testScheduler.run((helpers) => {
+      const { expectObservable } = helpers;
+      const source = fromNullable(a);
+      const expected = "#";
+      expectObservable(source).toBe(expected);
+    });
+  });
 
-    expectObservable(e1.pipe(throttleTime(t))).toBe(expected);
-    expectSubscriptions(e1.subscriptions).toBe(e1subs);
+  it.each([0, "", false])("of if %s", (a) => {
+    testScheduler.run((helpers) => {
+      const { expectObservable } = helpers;
+      const source = fromNullable(a);
+      const expected = "(a|)";
+      expectObservable(source).toBe(expected, { a });
+    });
   });
 });
