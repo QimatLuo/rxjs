@@ -1,13 +1,9 @@
-import { TestScheduler } from "rxjs/testing";
-import { fromNullable } from "../src/fromNullable";
-
-const testScheduler = new TestScheduler((actual, expected) => {
-  expect(actual).toEqual(expected);
-});
+import { testScheduler } from "../testScheduler";
+import { fromNullable } from "../src/Observable";
 
 describe("fromNullable", () => {
   it.each([null, undefined])("throwError if %s", (a) => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { expectObservable } = helpers;
       const source = fromNullable(a);
       const expected = "#";
@@ -16,7 +12,7 @@ describe("fromNullable", () => {
   });
 
   it.each([0, "", false])("of if %s", (a) => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { expectObservable } = helpers;
       const source = fromNullable(a);
       const expected = "(a|)";
