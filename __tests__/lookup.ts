@@ -1,13 +1,9 @@
-import { TestScheduler } from "rxjs/testing";
+import { testScheduler } from "../testScheduler";
 import { lookup } from "../src/lookup";
-
-const testScheduler = new TestScheduler((actual, expected) => {
-  expect(actual).toEqual(expected);
-});
 
 describe("match", () => {
   it("throwError if empty", () => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
       const source = cold(`a|`, {
         a: [],
@@ -18,7 +14,7 @@ describe("match", () => {
   });
 
   it("throwError if not found", () => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
       const source = cold(`a|`, {
         a: ["a"],
@@ -29,7 +25,7 @@ describe("match", () => {
   });
 
   it("of if found", () => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
       const source = cold(`a|`, {
         a: ["a", "b"],

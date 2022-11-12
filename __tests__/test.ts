@@ -1,10 +1,5 @@
-import { TestScheduler } from "rxjs/testing";
-import { filterTest, mapTest, test } from "../src/test";
-
-const testScheduler = () =>
-  new TestScheduler((actual, expected) => {
-    expect(actual).toEqual(expected);
-  });
+import { testScheduler } from "../testScheduler";
+import { filterTest, mapTest } from "../src/test";
 
 describe("filterTest", () => {
   it("filter boolean if by match result", () => {

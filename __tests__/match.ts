@@ -1,13 +1,9 @@
-import { TestScheduler } from "rxjs/testing";
+import { testScheduler } from "../testScheduler";
 import { match } from "../src/match";
-
-const testScheduler = new TestScheduler((actual, expected) => {
-  expect(actual).toEqual(expected);
-});
 
 describe("match", () => {
   it("throwError if not match", () => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
       const source = cold(`abc|`).pipe(match(/z/));
       const expected = "#";
@@ -16,7 +12,7 @@ describe("match", () => {
   });
 
   it("of if match", () => {
-    testScheduler.run((helpers) => {
+    testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
       const re = /\w/;
       const source = cold(`abc|`).pipe(match(re));
