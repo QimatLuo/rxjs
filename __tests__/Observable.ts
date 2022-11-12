@@ -1,5 +1,5 @@
 import { testScheduler } from "../testScheduler";
-import { fromNullable } from "../src/fromNullable";
+import { fromNullable } from "../src/Observable";
 
 describe("fromNullable", () => {
   it.each([null, undefined])("throwError if %s", (a) => {

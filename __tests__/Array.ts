@@ -1,7 +1,7 @@
 import { testScheduler } from "../testScheduler";
-import { lookup } from "../src/lookup";
+import { lookup } from "../src/Array";
 
-describe("match", () => {
+describe("lookup", () => {
   it("throwError if empty", () => {
     testScheduler().run((helpers) => {
       const { cold, expectObservable } = helpers;
