@@ -1,9 +1,58 @@
 import { fromNullable } from "./Observable";
-import { Observable, UnaryFunction, map, mergeMap, pipe } from "rxjs";
+import {
+  EMPTY,
+  Observable,
+  UnaryFunction,
+  map,
+  mergeMap,
+  pipe,
+  expand,
+  last,
+} from "rxjs";
 
 export function lookup<O>() {
   return <K extends keyof O>(key: K) =>
     pipe(mergeMap((o: O) => fromNullable(o[key])));
+}
+
+interface pathF<O> {
+  <K1 extends keyof O>(keys: [K1]): UnaryFunction<
+    Observable<O>,
+    Observable<O[K1]>
+  >;
+  <K1 extends keyof O, K2 extends keyof O[K1]>(keys: [K1, K2]): UnaryFunction<
+    Observable<O>,
+    Observable<O[K1][K2]>
+  >;
+  <K1 extends keyof O, K2 extends keyof O[K1], K3 extends keyof O[K1][K2]>(
+    keys: [K1, K2, K3]
+  ): UnaryFunction<Observable<O>, Observable<O[K1][K2][K3]>>;
+  <
+    K1 extends keyof O,
+    K2 extends keyof O[K1],
+    K3 extends keyof O[K1][K2],
+    K4 extends keyof O[K1][K2][K3]
+  >(
+    keys: [K1, K2, K3, K4]
+  ): UnaryFunction<Observable<O>, Observable<O[K1][K2][K3][K4]>>;
+  <
+    K1 extends keyof O,
+    K2 extends keyof O[K1],
+    K3 extends keyof O[K1][K2],
+    K4 extends keyof O[K1][K2][K3],
+    K5 extends keyof O[K1][K2][K3][K4]
+  >(
+    keys: [K1, K2, K3, K4, K5]
+  ): UnaryFunction<Observable<O>, Observable<O[K1][K2][K3][K4][K5]>>;
+}
+export function path<O>(): pathF<O> {
+  return (keys: any[]) =>
+    pipe(
+      expand((o: any, i) =>
+        i === keys.length ? EMPTY : fromNullable(o[keys[i]])
+      ),
+      last()
+    );
 }
 
 export function zipObj<K, A>(
