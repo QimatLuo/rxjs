@@ -1,4 +1,10 @@
-import { Observable, UnaryFunction, map, pipe } from "rxjs";
+import { fromNullable } from "./Observable";
+import { Observable, UnaryFunction, map, mergeMap, pipe } from "rxjs";
+
+export function lookup<O>() {
+  return <K extends keyof O>(key: K) =>
+    pipe(mergeMap((o: O) => fromNullable(o[key])));
+}
 
 export function zipObj<K, A>(
   keys: readonly [K]
