@@ -1,5 +1,5 @@
 import { testScheduler } from "../testScheduler";
-import { lookup, zipObj } from "../src/Record";
+import { lookup, path, zipObj } from "../src/Record";
 
 describe("lookup", () => {
   it("throw if null", () => {
@@ -24,6 +24,38 @@ describe("lookup", () => {
       const expected = "a|";
       expectObservable(source).toBe(expected, {
         a: "A",
+      });
+    });
+  });
+});
+
+describe("path", () => {
+  it("throw if null", () => {
+    testScheduler().run((helpers) => {
+      const { cold, expectObservable } = helpers;
+      const a = {
+        a: {
+          b: null,
+        },
+      };
+      const source = cold(`a|`, { a }).pipe(path<typeof a>()(["a", "b"]));
+      const expected = "#";
+      expectObservable(source).toBe(expected);
+    });
+  });
+
+  it("of if found", () => {
+    testScheduler().run((helpers) => {
+      const { cold, expectObservable } = helpers;
+      const a = {
+        a: {
+          b: "c",
+        },
+      };
+      const source = cold(`a|`, { a }).pipe(path<typeof a>()(["a", "b"]));
+      const expected = "-(a|)";
+      expectObservable(source).toBe(expected, {
+        a: "c",
       });
     });
   });
