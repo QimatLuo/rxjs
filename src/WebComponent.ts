@@ -2,12 +2,14 @@
 import { ReplaySubject, map } from "rxjs";
 
 export function WebComponent({
+  Component,
   attachShadow,
   debug,
   name,
   props = [],
   template = "",
 }: {
+  Component: typeof HTMLElement;
   attachShadow?: ShadowRootInit;
   debug?: boolean;
   name: string;
@@ -28,7 +30,7 @@ export function WebComponent({
 
   customElements.define(
     name,
-    class extends HTMLElement {
+    class extends Component {
       constructor() {
         super();
 
