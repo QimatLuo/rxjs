@@ -3,15 +3,22 @@ import { ReplaySubject, map } from "rxjs";
 
 export function WebComponent({
   attachShadow,
+  debug,
   name,
   props = [],
   template = "",
 }: {
   attachShadow?: ShadowRootInit;
+  debug?: boolean;
   name: string;
   props?: string[];
   template: string;
 }) {
+  const log = (a: string) => {
+    if (debug) {
+      console.log(name, a);
+    }
+  };
   const attributeChanged = new ReplaySubject<{
     name: string;
     oldValue: string | null;
@@ -30,20 +37,23 @@ export function WebComponent({
 
         const root = this.attachShadow(attachShadow || { mode: "open" });
         root.append(tmpl.content.cloneNode(true));
-
-        shadowRoot.next(root);
       }
 
       connectedCallback() {
-        console.log(name, "connectedCallback");
+        log("connectedCallback");
+        if (this.shadowRoot) {
+          shadowRoot.next(this.shadowRoot);
+        } else {
+          shadowRoot.error("connectedCallback");
+        }
       }
 
       adoptedCallback() {
-        console.log(name, "adoptedCallback");
+        log("adoptedCallback");
       }
 
       disconnectedCallback() {
-        console.log(name, "disconnectedCallback");
+        log("disconnectedCallback");
         attributeChanged.complete();
         shadowRoot.complete();
       }
